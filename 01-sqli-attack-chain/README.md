@@ -17,7 +17,6 @@
   - [Walkthrough – Automated (sqlmap)](#walkthrough--automated-sqlmap)
 - [Challenge 1.2 – Deluxe Fraud](#challenge-12--deluxe-fraud)
   - [Walkthrough – Burp Suite Repeater](#walkthrough--burp-suite-repeater)
-- [Mitigation](#mitigation)
 - [References](#references)
 
 ---

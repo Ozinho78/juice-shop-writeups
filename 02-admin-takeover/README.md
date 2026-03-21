@@ -11,7 +11,6 @@
 
 - [Overview](#overview)
 - [Vulnerability Description](#vulnerability-description)
-- [Real-World Impact](#real-world-impact)
 - [Challenge 2.1 – Find the Admin Section](#challenge-21--find-the-admin-section)
   - [Reconnaissance via main.js](#reconnaissance-via-mainjs)
   - [Walkthrough](#walkthrough)
@@ -21,7 +20,6 @@
   - [Walkthrough – Hash Cracking](#walkthrough--hash-cracking)
 - [Mitigation](#mitigation)
 - [References](#references)
-- [Loom Video Plan](#loom-video-plan)
 
 ---
 
@@ -44,19 +42,6 @@ This chain combines two distinct vulnerability classes:
 **Security Misconfiguration** — The admin panel is only hidden from the UI navigation but remains fully accessible via a direct URL. There is no server-side access control preventing unauthenticated users from discovering or visiting the route. Relying on obscurity instead of proper authorization is a classic misconfiguration.
 
 **Broken Authentication** — The admin account has a weak, commonly used password with no brute-force protection in place. There is no account lockout, no rate limiting, and no multi-factor authentication — making the login endpoint trivially vulnerable to credential attacks via tools like Burp Suite Intruder.
-
----
-
-## Real-World Impact
-
-A compromised admin account gives an attacker full control over the application:
-
-- Read, modify, or delete any user account or order
-- Access all customer data including emails, addresses, and payment information
-- Manipulate product listings, reviews, and pricing
-- Potentially pivot to the underlying server depending on application permissions
-
-Security Misconfiguration is ranked **#5 in the OWASP Top 10 (A05:2021)** and Broken Authentication as **#7 (A07:2021)**. Together they represent one of the most common and impactful attack chains in real-world web application compromises.
 
 ---
 
