@@ -18,7 +18,6 @@
   - [Walkthrough – Burp Suite Intruder](#walkthrough--burp-suite-intruder)
 - [Challenge 2.3 – Retrieve the Admin Password](#challenge-23--retrieve-the-admin-password)
   - [Walkthrough – Hash Cracking](#walkthrough--hash-cracking)
-- [Mitigation](#mitigation)
 - [References](#references)
 
 ---
@@ -187,7 +186,7 @@ Using the same `login_request.txt` from Challenge #1, run sqlmap with a filter f
 
 **Linux / macOS:**
 ```bash
-sqlmap -r login_request.txt \
+sqlmap -r login_request_short.txt \
   -p email \
   --flush-session \
   --ignore-code=401,500 \
@@ -205,7 +204,7 @@ sqlmap -r login_request.txt \
 
 **Windows (PowerShell):**
 ```powershell
-sqlmap -r login_request.txt `
+sqlmap -r login_request_short.txt `
   -p email `
   --flush-session `
   --ignore-code=401,500 `
