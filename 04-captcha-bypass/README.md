@@ -11,7 +11,6 @@
 
 - [Overview](#overview)
 - [Vulnerability Description](#vulnerability-description)
-- [Real-World Impact](#real-world-impact)
 - [Challenge 4 – CAPTCHA Bypass](#challenge-4--captcha-bypass)
   - [Reconnaissance](#reconnaissance)
   - [Walkthrough – Manual Analysis (Burp Suite)](#walkthrough--manual-analysis-burp-suite)
@@ -37,19 +36,6 @@ The CAPTCHA answer is validated by the server, but the question is a simple arit
 
 **Flaw 2 – CAPTCHA ID replay**  
 Each CAPTCHA has a `captchaId` tied to it. The server does not invalidate a `captchaId` after it has been used once. This means the same CAPTCHA ID and answer can be replayed in every subsequent request without ever requesting a new CAPTCHA — rendering the anti-automation mechanism completely ineffective.
-
----
-
-## Real-World Impact
-
-A bypassable CAPTCHA allows automated abuse of any endpoint it is meant to protect:
-
-- **Spam attacks** — mass submission of feedback, reviews, or contact forms
-- **Credential stuffing** — automated login attempts against protected login forms
-- **Account enumeration** — automated probing of registration or password reset endpoints
-- **Resource exhaustion** — flooding backend services with automated requests
-
-CAPTCHA bypass falls under **OWASP Top 10 A07:2021 – Identification and Authentication Failures** and more broadly under **broken anti-automation controls**. In production systems, a bypassable CAPTCHA on a login or registration form can directly enable large-scale account takeover campaigns.
 
 ---
 
