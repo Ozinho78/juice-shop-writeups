@@ -1,7 +1,7 @@
 # Challenge #2 – Admin Takeover
 
 > **Category:** Broken Authentication / Security Misconfiguration  
-> **Difficulty:** ⭐⭐⭐  
+> **Difficulty:** ⭐⭐⭐
 > **Tools:** Burp Suite Intruder, Browser DevTools, CrackStation  
 > **Video:** ▶ [Watch on Loom](https://loom.com/TBD)
 

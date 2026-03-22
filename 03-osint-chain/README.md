@@ -1,7 +1,7 @@
 # Challenge #3 – OSINT Chain
 
 > **Category:** Sensitive Data Exposure  
-> **Difficulty:** ⭐⭐
+> **Difficulty:** ⭐⭐⭐
 > **Tools:** ExifTool, Burp Suite Repeater, SecLists  
 > **Video:** ▶ [Watch on Loom](https://loom.com/TBD)
 
