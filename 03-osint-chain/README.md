@@ -11,7 +11,6 @@
 
 - [Overview](#overview)
 - [Vulnerability Description](#vulnerability-description)
-- [Real-World Impact](#real-world-impact)
 - [Challenge 3.1 – Geo-Stalking](#challenge-31--geo-stalking)
   - [Reconnaissance](#reconnaissance)
   - [Walkthrough – Metadata Extraction with ExifTool](#walkthrough--metadata-extraction-with-exiftool)
@@ -29,7 +28,7 @@ This writeup covers an OSINT-based attack chain against the OWASP Juice Shop tha
 The chain consists of two linked challenges:
 
 1. **Geo-Stalking** — extract GPS coordinates from an image uploaded to the Juice Shop Photo Wall to determine a user's location
-2. **Bjoern's Favourite Pet** — use OSINT research to answer Bjoern's security question and reset his account password
+2. **John's Favourite Place to Hike** — use OSINT research to answer Johns's security question and reset his account password
 
 Both challenges are performed against a clean local Docker instance on `http://localhost:4000`.
 
@@ -40,19 +39,6 @@ Both challenges are performed against a clean local Docker instance on `http://l
 **Sensitive Data Exposure via Metadata** — Image files captured by smartphones and cameras embed rich metadata in the EXIF format, including GPS coordinates, device model, timestamp, and camera settings. When users upload photos to a web application without server-side metadata stripping, this information becomes publicly accessible to anyone who can download the file.
 
 **Weak Security Questions** — Security questions represent a fundamentally flawed authentication recovery mechanism. Answers to questions like "What is your pet's name?" are often discoverable through social media, public profiles, or simple OSINT research — effectively making the account recovery process less secure than the original password.
-
----
-
-## Real-World Impact
-
-This attack chain demonstrates a realistic threat scenario:
-
-- **Physical location exposure** — GPS metadata in uploaded photos can reveal home addresses, workplaces, or daily routines, enabling stalking or physical attacks
-- **Account takeover without hacking** — security questions bypass the need for technical exploitation entirely; the "attack" is just research
-- **Chained exposure** — a single leaked image can lead to a full account takeover when combined with weak recovery mechanisms
-- **No technical skill required** — this attack is accessible to anyone with basic OSINT knowledge
-
-Sensitive Data Exposure is ranked **#2 in the OWASP Top 10 (A02:2021 – Cryptographic Failures)** and remains one of the most underestimated vulnerability classes because the data often appears harmless in isolation.
 
 ---
 
@@ -73,15 +59,16 @@ Open the Juice Shop and navigate to:
 http://localhost:4000/#/photo-wall
 ```
 
-> **Note:** The Photo Wall link may not appear in the main navigation. If so, navigate directly via the URL above or find the route via `main.js` inspection as shown in Challenge #2.
+> [!NOTE]
+> The Photo Wall link may not appear in the main navigation. If so, navigate directly via the URL above or find the route via `main.js` inspection as shown in Challenge #2.
 
 **Step 2 – Identify the target image**
 
-Browse the Photo Wall and identify an image uploaded by the target user. The challenge hints at a specific image — look for one with a caption referencing a memorable or scenic location.
+Browse the Photo Wall and identify an image uploaded by the target user. The challenge hints at a specific image — look for one with a caption referencing a memorable or scenic location. In this case we are looking for John's photo. We already got his email address from the admin section in one of the previous challenges.
 
 **Step 3 – Download the image**
 
-Right-click the image → **Save image as** → save locally, e.g. `photo-wall-image.jpg`
+Right-click the image → **Save image as** → save locally, e.g. `favorite-hiking-place.png`
 
 Alternatively, intercept the image request in Burp Suite to get the direct URL, then download via:
 
@@ -93,12 +80,12 @@ http://localhost:4000/assets/public/images/uploads/<filename>.jpg
 
 **Windows:**
 ```powershell
-exiftool.exe photo-wall-image.jpg
+exiftool.exe favorite-hiking-place.png
 ```
 
 **Linux / macOS:**
 ```bash
-exiftool photo-wall-image.jpg
+exiftool favorite-hiking-place.png
 ```
 
 The output contains the embedded GPS coordinates:
