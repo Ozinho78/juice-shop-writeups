@@ -3,7 +3,7 @@
 > **Category:** Injection  
 > **Difficulty:** ⭐⭐⭐  
 > **Tools:** sqlmap, Burp Suite Repeater  
-> **Video:** ▶ [Watch on Loom](https://loom.com/TBD)
+> **Video:** ▶ [Watch on Loom](https://www.loom.com/share/0667a685bc41424b9b4f2e1f9b388556)
 
 ---
 
