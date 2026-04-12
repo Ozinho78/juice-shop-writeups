@@ -3,7 +3,7 @@
 > **Category:** Broken Anti-Automation  
 > **Difficulty:** ⭐⭐⭐  
 > **Tools:** Burp Suite Repeater, Python 3  
-> **Video:** ▶ [Watch on Loom](https://loom.com/TBD)
+> **Video:** ▶ [Watch on Loom](https://www.loom.com/share/99e9fbe8cf0249639d94a0a89b6cff0c)
 
 ---
 
