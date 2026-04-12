@@ -3,7 +3,7 @@
 > **Category:** Broken Authentication / Security Misconfiguration  
 > **Difficulty:** ⭐⭐⭐
 > **Tools:** Burp Suite Intruder, Browser DevTools, CrackStation  
-> **Video:** ▶ [Watch on Loom](https://loom.com/TBD)
+> **Video:** ▶ [Watch on Loom](https://www.loom.com/share/3ca7822675a14947b8f5d71addeef80b)
 
 ---
 
