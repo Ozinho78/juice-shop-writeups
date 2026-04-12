@@ -1,0 +1,5 @@
+POST /rest/user/login HTTP/1.1
+Host: localhost:4000
+Content-Type: application/json
+
+{"email":"jim@juice-sh.op","password":"test1234"}
