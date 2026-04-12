@@ -3,7 +3,7 @@
 > **Category:** Sensitive Data Exposure  
 > **Difficulty:** ⭐⭐⭐
 > **Tools:** ExifTool, Burp Suite Repeater, SecLists  
-> **Video:** ▶ [Watch on Loom](https://loom.com/TBD)
+> **Video:** ▶ [Watch on Loom](https://www.loom.com/share/76cf2df520c34444bfe51b0cccd0d7c5)
 
 ---
 
