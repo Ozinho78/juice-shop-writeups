@@ -80,7 +80,7 @@ http://localhost:4000/assets/public/images/uploads/<filename>.jpg
 
 **Windows:**
 ```powershell
-exiftool.exe favorite-hiking-place.png
+.\exiftool.exe favorite-hiking-place.png
 ```
 
 **Linux / macOS:**
@@ -103,11 +103,45 @@ Copy the GPS coordinates and paste them into Google Maps:
 36°57'31.38"N 84°20'55.04"W
 ```
 
-The coordinates resolve to a specific location — this is the answer required to solve the Geo-Stalking challenge in the Juice Shop.
+The coordinates resolve to the **Daniel Boone National Forest** in Kentucky, USA — this is the answer to John's security question *"What is your favourite place for hiking?"*.
 
-**Step 6 – Submit the location in Juice Shop**
+**Step 6 – Navigate to the Forgot Password page**
+ 
+```
+http://localhost:4000/#/forgot-password
+```
+ 
+**Step 7 – Enter John's email address**
+ 
+```
+john@juice-sh.op
+```
+ 
+The page displays his security question:
+```
+What is your favourite place for hiking?
+```
+ 
+**Step 8 – Enter the OSINT-discovered answer**
+ 
+```
+Daniel Boone National Forest
+```
+ 
+**Step 9 – Set a new password**
+ 
+Enter any new password — the application accepts it without any additional verification. John's account password has now been reset.
+ 
+**Step 10 – Log in as John**
+ 
+Navigate to the login page and log in with:
+```
+Email:    john@juice-sh.op
+Password: <your newly set password>
+```
+ 
+The Juice Shop awards the **"Geo Stalking"** challenge upon successful login.
 
-The Juice Shop challenge asks you to identify the location. Navigate to the Score Board and trigger the challenge validation by submitting the correct answer when prompted.
 
 ---
 
